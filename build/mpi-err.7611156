@@ -1,0 +1,9 @@
++ [[ hB != hxB ]]
++ XTRACE_STATE=-x
++ [[ hxB != hxB ]]
++ VERBOSE_STATE=+v
++ set +xv
++ unset XTRACE_STATE VERBOSE_STATE
++ srun -n 4 ./hello-world/hello.exe
+srun: Job step aborted: Waiting up to 6 seconds for job step to finish.
+srun: error: jrc0055: tasks 0-3: Terminated
