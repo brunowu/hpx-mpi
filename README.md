@@ -41,13 +41,11 @@ mkdir build
 cd build
 cmake .. -DCMAKE_PREFIX_PATH=/p/project/cslai/wu/source/hpx_1.3.0/build/Release-mpi -DCMAKE_BUILD_TYPE=Release
 ```
-#### Run
+#### (Correct) Run
 ```bash
-srun -n 4 ./hello-world/hello.exe
+srun -n 4 ./hello-world/hello.exe --hpx:run-hpx-main
 ```
 
-#### Output
-```bash
-Rank (0) : hello, I'm 0 out of 4 procs !
-```
+For the mixture of HPX and MPI, where HPX runs only in node-level, it manages the computation and communication using different HPX threads.
 
+By default HPX runs hpx-main on rank 0 only. The other ranks wait for actions to be spawned from other ranks. Thus it is necessary to tell HPX to run main from all the ranks with the option `--hpx:run-hpx-main`.
