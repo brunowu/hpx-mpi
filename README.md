@@ -15,7 +15,6 @@ module load hwloc/2.0.3
 module load jemalloc
 module load CMake/3.14.0
 module load Boost/1.69.0-Python-2.7.16
-module load CUDA/10.1.105
 ```
 
 #### Configuration
