@@ -1,23 +1,10 @@
 // HPX includes
 #include <hpx/hpx_init.hpp>
-//#include <hpx/util/high_resolution_timer.hpp>
-//#include <hpx/include/compute.hpp>
-//#include <hpx/include/parallel_transform.hpp>
-//#include <hpx/lcos/split_future.hpp>
 #include <hpx/hpx_main.hpp>
-
-//#include <hpx/include/async.hpp>
-//#include <hpx/include/iostreams.hpp>
 
 #include <mpi.h>
 
 #include <iostream>
-//#include <vector>
-//#include <iterator>
-//#include <iomanip>
-//#include <chrono>
-//#include <algorithm>
-//#include <math.h>
 
 int main(int argc, char** argv) {
 

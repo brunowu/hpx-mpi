@@ -21,7 +21,16 @@ module load CUDA/10.1.105
 #### Configuration
 
 ```bash
-cmake ../.. -DCMAKE_MODULE_PATH=/p/project/cslai/wu/source/hpx_1.3.0 -DCMAKE_C_COMPILER=/usr/local/software/jureca/Stages/2019a/software/GCCcore/8.3.0/bin/gcc -DCMAKE_CXX_COMPILER=/usr/local/software/jureca/Stages/2019a/software/GCCcore/8.3.0/bin/g++ -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/p/project/cslai/wu/source/hpx_1.3.0/build/Release-mpi -DHWLOC_ROOT=/usr/local/software/jureca/Stages/2019a/software/hwloc/2.0.3-GCCcore-8.3.0 -DHPX_WITH_MALLOC=jemalloc -DHPX_WITH_TESTS=OFF -DHPX_WITH_EXAMPLES=OFF -DHPX_WITH_THREAD_IDLE_RATES=ON -DHPX_WITH_PARCELPORT_MPI=ON 
+cmake ../.. -DCMAKE_MODULE_PATH=/p/project/cslai/wu/source/hpx_1.3.0 \
+	    -DCMAKE_C_COMPILER=/usr/local/software/jureca/Stages/2019a/software/GCCcore/8.3.0/bin/gcc \
+	    -DCMAKE_CXX_COMPILER=/usr/local/software/jureca/Stages/2019a/software/GCCcore/8.3.0/bin/g++ \
+	    -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/p/project/cslai/wu/source/hpx_1.3.0/build/Release-mpi \
+	    -DHWLOC_ROOT=/usr/local/software/jureca/Stages/2019a/software/hwloc/2.0.3-GCCcore-8.3.0 \
+            -DHPX_WITH_MALLOC=jemalloc \
+	    -DHPX_WITH_TESTS=OFF \
+	    -DHPX_WITH_EXAMPLES=OFF \
+	    -DHPX_WITH_THREAD_IDLE_RATES=ON \
+	    -DHPX_WITH_PARCELPORT_MPI=ON 
 ```
 
 ### Compile and run 
