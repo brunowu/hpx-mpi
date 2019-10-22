@@ -14,6 +14,7 @@ if(HPX_FOUND AND MPI_FOUND)
   include_directories(${HPX_INCLUDE_DIRS})
 
   ADD_SUBDIRECTORY(hello-world)
+  ADD_SUBDIRECTORY(thread_pool)
 
   include(Dart)
   include(CPack)
