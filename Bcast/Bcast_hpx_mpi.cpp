@@ -98,7 +98,7 @@ int hpx_main(boost::program_options::variables_map& vm){
 
     double elapsed = t.elapsed();
 
-    if(rank == 0) 
+//    if(rank == 0) 
 	std::cout << "HPX ]> Proc nb = " << world_size <<", size = " << s << ", rep = " << rep <<"; elapsed time: " << elapsed << std::endl;
 
     if(debug) showMatrix(A, s, s, rank);

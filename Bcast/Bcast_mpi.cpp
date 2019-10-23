@@ -113,7 +113,9 @@ int main(int argc, char** argv) {
 
     std::chrono::duration<double> elapsed = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
 
-    if(rank == 0) 
+    MPI_Barrier(MPI_COMM_WORLD);
+
+//    if(rank == 0) 
 	std::cout << "MPI ]> Proc nb = " << world_size <<", size = " << s << ", rep = " << rep <<"; elapsed time: " << elapsed.count() << std::endl;
 
     if(debug) showMatrix(A, s, s, rank);

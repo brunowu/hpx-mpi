@@ -101,7 +101,7 @@ int hpx_main(boost::program_options::variables_map& vm){
     if(rank == root){
 
 	A_fut = hpx::dataflow(
-//	    matrix_HP_executor,
+	    matrix_HP_executor,
             hpx::util::unwrapping([length](double *A){
 
             hpx::util::high_resolution_timer t2;
@@ -121,7 +121,7 @@ int hpx_main(boost::program_options::variables_map& vm){
     for(int j = 0; j < rep; j++){
 
         A_fut = hpx::dataflow(
-//            mpi_executor,
+            mpi_executor,
             hpx::util::unwrapping([length, root](double *A){
 		
 		MPI_Bcast(A, length, MPI_DOUBLE, root, MPI_COMM_WORLD);
@@ -133,7 +133,7 @@ int hpx_main(boost::program_options::variables_map& vm){
 
 	if(rank == root){
             A_fut = hpx::dataflow(
-//	        matrix_HP_executor,
+	        matrix_HP_executor,
                 hpx::util::unwrapping([length, j](double *A){
 
                     for(int i = 0; i < length; i++){
@@ -146,7 +146,7 @@ int hpx_main(boost::program_options::variables_map& vm){
             );
 	} else {
 	    A_fut = hpx::dataflow(
-//                matrix_normal_executor,
+                matrix_normal_executor,
                 hpx::util::unwrapping([length, j](double *A){
 
                     for(int i = 0; i < length; i++){
@@ -164,7 +164,7 @@ int hpx_main(boost::program_options::variables_map& vm){
 
     double elapsed = t.elapsed();
 
-    if(rank == 0) 
+//    if(rank == 0) 
 	std::cout << "HPX v3]> Proc nb = " << world_size <<", size = " << s << ", rep = " << rep <<"; elapsed time: " << elapsed << std::endl;
 
     if(debug) showMatrix(A, s, s, rank);
