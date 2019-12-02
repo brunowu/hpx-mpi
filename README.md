@@ -46,6 +46,8 @@ cmake .. -DCMAKE_PREFIX_PATH=/p/project/cslai/wu/source/hpx_1.3.0/build/Release-
 srun -n 4 ./hello-world/hello.exe --hpx:run-hpx-main
 ```
 
+#### ADD SUMMA
+
 #### Bcast example
 
 ```bash
