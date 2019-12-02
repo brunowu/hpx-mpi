@@ -1,1 +1,3 @@
 ADD_SUBDIRECTORY(mpi)
+ADD_SUBDIRECTORY(hpx-mpi)
+
