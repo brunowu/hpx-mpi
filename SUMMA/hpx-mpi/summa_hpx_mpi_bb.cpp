@@ -140,10 +140,11 @@ void SUMMA(int m, int n, int k, int mb, int nb, int kb, const double alpha, std:
     std::vector<hpx::shared_future<std::vector<double>>> C_save_fut;
 
     for(int i = 0; i < C_save.size(); i++){
-	C_save_fut[i] = hpx::make_ready_future(C_save[i]);
+	C_save_fut.push_back(hpx::make_ready_future(C_save[i]));
     } 
    
     hpx::shared_future<MPI_Comm> comm_fut =  hpx::make_ready_future(comm);
+
 
     int bcast_root;
     
@@ -151,6 +152,7 @@ void SUMMA(int m, int n, int k, int mb, int nb, int kb, const double alpha, std:
 
     for(kk = 0; kk < s; kk += bsize){
 	bcast_root = (int)(kk / sb);
+
 	for(int i = 0; i < bn * bn; i++){
 	    std::vector<double> A_loc(bsize * bsize);
 	    hpx::shared_future<std::vector<double>> A_loc_fut = hpx::make_ready_future(A_loc);
@@ -205,6 +207,7 @@ void SUMMA(int m, int n, int k, int mb, int nb, int kb, const double alpha, std:
         for(int i = 0; i < bn * bn; i++){
 	    C->at(i) = C_save_fut[i].get();
         }
+
     }
 
     std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
@@ -301,7 +304,6 @@ int main(int argc, char** argv) {
     int ntasks = 1;
     if (std::getenv("SLURM_STEP_NUM_TASKS")) {
         ntasks = atoi(std::getenv("SLURM_STEP_NUM_TASKS"));
-//        std::cout << "SLURM_STEP_NUM_TASKS " << ntasks << std::endl;
     }
 
     if (use_scheduler) {
@@ -312,8 +314,7 @@ int main(int argc, char** argv) {
         [](hpx::threads::policies::callback_notifier& notifier, std::size_t num_threads,
            std::size_t thread_offset, std::size_t pool_index,
            std::string const& pool_name) -> std::unique_ptr<hpx::threads::thread_pool_base> {
-//          std::cout << "User defined scheduler creation callback " << std::endl;
-          std::unique_ptr<high_priority_sched> scheduler(new high_priority_sched(
+           std::unique_ptr<high_priority_sched> scheduler(new high_priority_sched(
                 num_threads, {6, 6, 64}, "shared-priority-scheduler"));
 
           scheduler_mode mode = scheduler_mode(scheduler_mode::do_background_work |
@@ -338,7 +339,6 @@ int main(int argc, char** argv) {
             [](hpx::threads::policies::callback_notifier& notifier, std::size_t num_threads,
                std::size_t thread_offset, std::size_t pool_index,
                std::string const& pool_name) -> std::unique_ptr<hpx::threads::thread_pool_base> {
-//               std::cout << "User defined scheduler creation callback " << std::endl;
                std::unique_ptr<high_priority_sched> scheduler(new high_priority_sched(
                    num_threads, {6, 6, 64}, "shared-priority-scheduler"));
 
@@ -355,8 +355,6 @@ int main(int argc, char** argv) {
         else {
   	    rp.create_thread_pool("mpi", hpx::resource::scheduling_policy::local_priority_fifo);  
         }
-//        std::cout << "[main] "
-//              << "thread_pools created \n";
 
         int count = 0;
         for (const hpx::resource::numa_domain& d : rp.numa_domains()) {
