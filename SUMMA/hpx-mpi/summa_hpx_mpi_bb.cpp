@@ -137,14 +137,23 @@ void SUMMA(int m, int n, int k, int mb, int nb, int kb, const double alpha, std:
     std::vector<std::vector<double>> B_save = B;
     std::vector<std::vector<double>> C_save = *C;;
 
+    std::vector<hpx::shared_future<std::vector<double>>> A_save_fut;
+    std::vector<hpx::shared_future<std::vector<double>>> B_save_fut;
     std::vector<hpx::shared_future<std::vector<double>>> C_save_fut;
+
+    for(int i = 0; i < A_save.size(); i++){
+        A_save_fut.push_back(hpx::make_ready_future(A_save[i]));
+    }
+
+    for(int i = 0; i < A_save.size(); i++){
+        B_save_fut.push_back(hpx::make_ready_future(B_save[i]));
+    }
 
     for(int i = 0; i < C_save.size(); i++){
 	C_save_fut.push_back(hpx::make_ready_future(C_save[i]));
     } 
    
     hpx::shared_future<MPI_Comm> comm_fut =  hpx::make_ready_future(comm);
-
 
     int bcast_root;
     
@@ -158,10 +167,7 @@ void SUMMA(int m, int n, int k, int mb, int nb, int kb, const double alpha, std:
 	    hpx::shared_future<std::vector<double>> A_loc_fut = hpx::make_ready_future(A_loc);
 
 	    if(coord[1] == bcast_root){
-                A_loc_fut = hpx::dataflow(matrix_HP_executor, hpx::util::unwrapping([A_save, i](std::vector<double> A_loc){
-			    A_loc = A_save[i];   
-                      	    return A_loc;
-                        }), A_loc_fut);
+		A_loc_fut = A_save_fut[i];
             }else{
             	A_loc_fut = hpx::dataflow(matrix_HP_executor, hpx::util::unwrapping([](std::vector<double> A_loc){
 			 	std::fill(A_loc.begin(), A_loc.end(), 0.0);
@@ -169,21 +175,21 @@ void SUMMA(int m, int n, int k, int mb, int nb, int kb, const double alpha, std:
                         }), A_loc_fut);
             }
 
+
 	    std::tie(A_loc_fut, comm_fut) = hpx::split_future(
 			hpx::dataflow(mpi_executor, hpx::util::unwrapping([bsize, bcast_root, rowComm](std::vector<double> A_loc, MPI_Comm comm){
 			        MPI_Bcast(A_loc.data(), bsize * bsize, MPI_DOUBLE, bcast_root, rowComm);
                          	return std::make_pair(A_loc, comm);
                         }), A_loc_fut, comm_fut));
 
+
+
 	    std::vector<double> B_loc(bsize * bsize);
             hpx::shared_future<std::vector<double>> B_loc_fut = hpx::make_ready_future(B_loc);
 
 
 	    if(coord[0] == bcast_root){
-                B_loc_fut = hpx::dataflow(matrix_HP_executor, hpx::util::unwrapping([B_save, i](std::vector<double> B_loc){
-                            B_loc = B_save[i];
-                            return B_loc;
-                        }), B_loc_fut);
+                B_loc_fut = B_save_fut[i];
             }else{
                 B_loc_fut = hpx::dataflow(matrix_HP_executor, hpx::util::unwrapping([](std::vector<double> B_loc){
                                 std::fill(B_loc.begin(), B_loc.end(), 0.0);
@@ -204,18 +210,26 @@ void SUMMA(int m, int n, int k, int mb, int nb, int kb, const double alpha, std:
 
         }
 
+/*
         for(int i = 0; i < bn * bn; i++){
 	    C->at(i) = C_save_fut[i].get();
         }
-
+*/
     }
 
+    for(kk = 0; kk < s; kk += bsize){
+        bcast_root = (int)(kk / sb);
+        for(int i = 0; i < bn * bn; i++){
+            C->at(i) = C_save_fut[i].get();
+        }
+    
+}
     std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
     
     std::chrono::duration<double> elapsed = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
 
     if(rank == 0){
-	std::cout << "| SUMMA HPX | " << nprocs << " | " << m * rproc << " | " << bsize << " | " << elapsed.count() << " | " << std::endl;
+	std::cout << "| SUMMA HPX BB | " << nprocs << " | " << m << " | " << bsize << " | " << elapsed.count() << " | " << std::endl;
     }
 
 }
