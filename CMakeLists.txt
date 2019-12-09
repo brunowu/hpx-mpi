@@ -104,8 +104,6 @@ link_directories(${HPX_LIBRARY_DIR})
 include_directories(${HPX_INCLUDE_DIRS})
 
 ADD_SUBDIRECTORY(hello-world)
-ADD_SUBDIRECTORY(thread_pool)
-ADD_SUBDIRECTORY(Bcast)
 ADD_SUBDIRECTORY(SUMMA)
 
 include(Dart)

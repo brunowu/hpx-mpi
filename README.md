@@ -46,21 +46,25 @@ cmake .. -DCMAKE_PREFIX_PATH=/p/project/cslai/wu/source/hpx_1.3.0/build/Release-
 srun -n 4 ./hello-world/hello.exe --hpx:run-hpx-main
 ```
 
-#### ADD SUMMA
+#### SUMMA Prototype
 
-#### Bcast example
+MPI version:
 
 ```bash
-srun -n 8 ./Bcast/Bcast_mpi.exe --size=10 --r=500
-
-srun -n 8  ./Bcast/Bcast_hpx_mpi.exe --size=10 --r=500 --hpx:run-hpx-main
-
-srun -n 8 ./Bcast/Bcast_hpx_mpi_fut.exe --size=10 --r=500 --hpx:run-hpx-main
-
-srun -n 8 ./Bcast/Bcast_hpx_mpi_pool.exe --size=10 --r=500 --hpx:run-hpx-main --hpx:threads=2 --hpx:ignore-batch-env
+srun -N ${PROCS} -n ${PROCS} ./SUMMA/mpi/summa_mpi_bb.exe --s=${SIZE} --b=${BLOCKSIZE}
 ```
 
+HPX+MPI version:
 
-For the mixture of HPX and MPI, where HPX runs only in node-level, it manages the computation and communication using different HPX threads.
+```bash
+srun -N ${PROCS} -n ${PROCS} ./SUMMA/hpx-mpi/summa_hpx_mpi_bb.exe --s=${SIZE} --b=${BLOCKSIZE} --hpx:run-hpx-main --hpx:ignore-batch-env --hpx:threads=${THREADS_NUM}
+```
 
-By default HPX runs hpx-main on rank 0 only. The other ranks wait for actions to be spawned from other ranks. Thus it is necessary to tell HPX to run main from all the ranks with the option `--hpx:run-hpx-main`.
+Remainder:
+
+1. The execution of SUMMA prototype requires one MPI proc per node; 
+
+2. The current implementation of SUMMA requires that `${SIZE}` should be divisible by `${BLOCKSIZE}`.
+
+
+
