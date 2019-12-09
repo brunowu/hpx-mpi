@@ -12,14 +12,14 @@ set(PAPI_ROOT "/usr/local" CACHE PATH "Folder containing PAPI libraries")
 if (NOT PAPI_ROOT AND DEFINED ENV{PAPI_ROOT})
   set(PAPI_ROOT $ENV{PAPI_ROOT} CACHE PATH "Folder containing PAPI")
 elseif (NOT PAPI_ROOT AND DEFINED ENV{PAPIROOT})
-  set(BLIS_ROOT $ENV{PAPIROOT} CACHE PATH "Folder containing PAPI")
+  set(PAPI_ROOT $ENV{PAPIROOT} CACHE PATH "Folder containing PAPI")
 endif()
 
 find_path(PAPI_INCLUDE_DIR
     NAMES
         papi.h
     PATHS
-        ${BLIS_ROOT}/include
+        ${PAPI_ROOT}/include
 )
 
 find_library(PAPI_LIBRARY libpapi.so libpapi.a papi
@@ -28,7 +28,7 @@ find_library(PAPI_LIBRARY libpapi.so libpapi.a papi
 
 include(FindPackageHandleStandardArgs)
 
-find_package_handle_standard_args(BLIS
+find_package_handle_standard_args(PAPI
         DEFAULT_MSG
         PAPI_LIBRARY
         PAPI_INCLUDE_DIR

@@ -3,18 +3,18 @@
 # Elemental: Distributed-memory, arbitrary-precision, dense and sparse-direct 
 # linear algebra, conic optimization, and lattice reduction 
 # Github: https://github.com/elemental/Elemental 
-#   Elemental_FOUND            : True if BLIS_INCUDE_DIR are found
-#   Elemental_INCLUDE_DIR      : where to find blis.h, etc.
-#   Elemental_INCLUDE_DIRS     : set when BLIS_INCLUDE_DIR found
+#   Elemental_FOUND            : True if Elemental_INCUDE_DIR are found
+#   Elemental_INCLUDE_DIR      : where to find elemental.h, etc.
+#   Elemental_INCLUDE_DIRS     : set when Elemental_INCLUDE_DIR found
 #   Elemental_LIBRARIES        : the library to link against.
 #   PMRRR_LIBRARY	       : PMRRR_LIBRARY to link
 
 set(Elemental_ROOT "/usr/local" CACHE PATH "Folder containing Elemental libraries")
 
 if (NOT Elemental_ROOT AND DEFINED ENV{Elemental_ROOT})
-  set(Elemental_ROOT $ENV{BLIS_ROOT} CACHE PATH "Folder containing Elemental")
+  set(Elemental_ROOT $ENV{Elemental_ROOT} CACHE PATH "Folder containing Elemental")
 elseif (NOT Elemental_ROOT AND DEFINED ENV{ElementalROOT})
-  set(Elemental_ROOT $ENV{BISLROOT} CACHE PATH "Folder containing Elemental")
+  set(Elemental_ROOT $ENV{ElementalROOT} CACHE PATH "Folder containing Elemental")
 endif()
 
 find_file(Elemental_basic_header 
